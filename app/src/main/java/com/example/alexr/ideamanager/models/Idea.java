@@ -1,6 +1,7 @@
 package com.example.alexr.ideamanager.models;
 
 public class Idea {
+
     private int id;
     private String name;
     private String status;
@@ -51,5 +52,4 @@ public class Idea {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-
 }

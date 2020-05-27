@@ -12,16 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
+import com.example.alexr.ideamanager.services.IdeaService;
+import com.example.alexr.ideamanager.services.ServiceBuilder;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IdeaDetailFragment extends Fragment {
 
     public static final String ARG_ITEM_ID = "item_id";
 
-    private Idea mItem;
+    private Idea mIdea;
 
     public IdeaDetailFragment() {
     }
@@ -50,16 +57,29 @@ public class IdeaDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             final CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
 
-            mItem = SampleContent.getIdeaById(getArguments().getInt(ARG_ITEM_ID));
+            IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
+            Call<Idea> call = ideaService.getIdea(getArguments().getInt(ARG_ITEM_ID));
 
-            ideaName.setText(mItem.getName());
-            ideaDescription.setText(mItem.getDescription());
-            ideaOwner.setText(mItem.getOwner());
-            ideaStatus.setText(mItem.getStatus());
+            call.enqueue(new Callback<Idea>() {
+                @Override
+                public void onResponse(Call<Idea> call, Response<Idea> response) {
+                    mIdea = response.body();
 
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getName());
-            }
+                    ideaName.setText(mIdea.getName());
+                    ideaDescription.setText(mIdea.getDescription());
+                    ideaOwner.setText(mIdea.getOwner());
+                    ideaStatus.setText(mIdea.getStatus());
+
+                    if (appBarLayout != null) {
+                        appBarLayout.setTitle(mIdea.getName());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Idea> call, Throwable t) {
+                    Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         updateIdea.setOnClickListener(new View.OnClickListener() {
