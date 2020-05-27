@@ -3,12 +3,13 @@ package com.example.alexr.ideamanager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
@@ -21,7 +22,7 @@ public class IdeaCreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idea_create);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
         final Context context = this;
 
@@ -31,11 +32,11 @@ public class IdeaCreateActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Button createIdea = (Button) findViewById(R.id.idea_create);
-        final EditText ideaName = (EditText) findViewById(R.id.idea_name);
-        final EditText ideaDescription = (EditText) findViewById(R.id.idea_description);
-        final EditText ideaOwner = (EditText) findViewById(R.id.idea_owner);
-        final EditText ideaStatus = (EditText) findViewById(R.id.idea_status);
+        Button createIdea = findViewById(R.id.idea_create);
+        final EditText ideaName = findViewById(R.id.idea_name);
+        final EditText ideaDescription = findViewById(R.id.idea_description);
+        final EditText ideaOwner = findViewById(R.id.idea_owner);
+        final EditText ideaStatus = findViewById(R.id.idea_status);
 
         createIdea.setOnClickListener(new View.OnClickListener() {
             @Override
