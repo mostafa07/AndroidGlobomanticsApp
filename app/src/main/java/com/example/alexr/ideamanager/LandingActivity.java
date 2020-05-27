@@ -39,7 +39,7 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(LandingActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
-                Log.wtf(LOG_TAG, t.getMessage());
+                Log.e(LOG_TAG, t.getMessage());
             }
         });
     }

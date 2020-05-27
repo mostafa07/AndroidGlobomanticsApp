@@ -14,8 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
 
-import java.util.Random;
-
 public class IdeaCreateActivity extends AppCompatActivity {
 
     @Override

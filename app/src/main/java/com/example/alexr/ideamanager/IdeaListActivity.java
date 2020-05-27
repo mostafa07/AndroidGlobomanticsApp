@@ -7,18 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
+import com.example.alexr.ideamanager.services.IdeaService;
+import com.example.alexr.ideamanager.services.ServiceBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class IdeaListActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = IdeaListActivity.class.getSimpleName();
 
     private boolean mTwoPane;
 
@@ -48,7 +56,20 @@ public class IdeaListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(SampleContent.IDEAS));
+        IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
+        Call<List<Idea>> call = ideaService.getIdeas();
+
+        call.enqueue(new Callback<List<Idea>>() {
+            @Override
+            public void onResponse(Call<List<Idea>> call, Response<List<Idea>> response) {
+                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(response.body()));
+            }
+
+            @Override
+            public void onFailure(Call<List<Idea>> call, Throwable t) {
+                Toast.makeText(IdeaListActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //region Adapter Region
@@ -120,5 +141,5 @@ public class IdeaListActivity extends AppCompatActivity {
             }
         }
     }
-//endregion
+    //endregion
 }
