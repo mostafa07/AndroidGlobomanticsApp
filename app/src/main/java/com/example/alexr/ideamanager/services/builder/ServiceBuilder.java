@@ -1,4 +1,4 @@
-package com.example.alexr.ideamanager.services;
+package com.example.alexr.ideamanager.services.builder;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

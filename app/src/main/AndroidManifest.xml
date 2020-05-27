@@ -13,29 +13,29 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.example.alexr.ideamanager.IdeaListActivity"
+            android:name="com.example.alexr.ideamanager.ui.IdeaListActivity"
             android:label="Innovation Ideas"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.example.alexr.ideamanager.IdeaDetailActivity"
+            android:name="com.example.alexr.ideamanager.ui.IdeaDetailActivity"
             android:label="@string/title_task_detail"
-            android:parentActivityName="com.example.alexr.ideamanager.IdeaListActivity"
+            android:parentActivityName="com.example.alexr.ideamanager.ui.IdeaListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.alexr.ideamanager.IdeaListActivity" />
+                android:value="com.example.alexr.ideamanager.ui.IdeaListActivity" />
         </activity>
         <activity
-            android:name="com.example.alexr.ideamanager.IdeaCreateActivity"
+            android:name="com.example.alexr.ideamanager.ui.IdeaCreateActivity"
             android:label="A New Thought"
-            android:parentActivityName="com.example.alexr.ideamanager.IdeaListActivity"
+            android:parentActivityName="com.example.alexr.ideamanager.ui.IdeaListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.alexr.ideamanager.IdeaListActivity" />
+                android:value="com.example.alexr.ideamanager.ui.IdeaListActivity" />
         </activity>
         <activity
-            android:name="com.example.alexr.ideamanager.LandingActivity"
+            android:name="com.example.alexr.ideamanager.ui.LandingActivity"
             android:label="Globomantics"
             android:theme="@style/AppTheme.NoActionBar">
 

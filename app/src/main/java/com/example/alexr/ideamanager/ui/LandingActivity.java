@@ -1,4 +1,4 @@
-package com.example.alexr.ideamanager;
+package com.example.alexr.ideamanager.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.alexr.ideamanager.R;
 import com.example.alexr.ideamanager.services.MessageService;
-import com.example.alexr.ideamanager.services.ServiceBuilder;
+import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
 
 import retrofit2.Call;
 import retrofit2.Callback;

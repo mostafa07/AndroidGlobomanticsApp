@@ -1,4 +1,4 @@
-package com.example.alexr.ideamanager;
+package com.example.alexr.ideamanager.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,10 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.alexr.ideamanager.R;
 import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
 import com.example.alexr.ideamanager.services.IdeaService;
-import com.example.alexr.ideamanager.services.ServiceBuilder;
+import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import retrofit2.Call;

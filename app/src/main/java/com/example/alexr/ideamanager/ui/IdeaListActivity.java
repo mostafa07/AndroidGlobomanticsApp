@@ -1,4 +1,4 @@
-package com.example.alexr.ideamanager;
+package com.example.alexr.ideamanager.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.alexr.ideamanager.R;
 import com.example.alexr.ideamanager.models.Idea;
 import com.example.alexr.ideamanager.services.IdeaService;
-import com.example.alexr.ideamanager.services.ServiceBuilder;
+import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;

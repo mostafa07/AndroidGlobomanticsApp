@@ -1,4 +1,4 @@
-package com.example.alexr.ideamanager;
+package com.example.alexr.ideamanager.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.alexr.ideamanager.R;
 
 public class IdeaDetailActivity extends AppCompatActivity {
 
