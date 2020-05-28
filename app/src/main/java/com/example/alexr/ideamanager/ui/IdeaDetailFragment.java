@@ -1,6 +1,5 @@
 package com.example.alexr.ideamanager.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alexr.ideamanager.R;
-import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
 import com.example.alexr.ideamanager.services.IdeaService;
 import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
@@ -52,8 +50,7 @@ public class IdeaDetailFragment extends Fragment {
         final EditText ideaOwner = rootView.findViewById(R.id.idea_owner);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            Activity activity = this.getActivity();
-            final CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
+            final CollapsingToolbarLayout appBarLayout = requireActivity().findViewById(R.id.toolbar_layout);
 
             IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
             Call<Idea> call = ideaService.getIdea(getArguments().getInt(ARG_ITEM_ID));
@@ -82,7 +79,7 @@ public class IdeaDetailFragment extends Fragment {
 
         updateIdea.setOnClickListener(view -> {
             IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
-            Call<Idea> call = ideaService.updateIdea(getArguments().getInt(ARG_ITEM_ID),
+            Call<Idea> call = ideaService.updateIdea(mIdea.getId(),
                     ideaName.getText().toString(),
                     ideaDescription.getText().toString(),
                     ideaStatus.getText().toString(),
@@ -102,13 +99,22 @@ public class IdeaDetailFragment extends Fragment {
             });
         });
 
-        deleteIdea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SampleContent.deleteIdea(getArguments().getInt(ARG_ITEM_ID));
-                Intent intent = new Intent(getContext(), IdeaListActivity.class);
-                startActivity(intent);
-            }
+        deleteIdea.setOnClickListener(view -> {
+            IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
+            Call<Void> call = ideaService.deleteIdea(mIdea.getId());
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Intent intent = new Intent(getContext(), IdeaListActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         return rootView;
