@@ -2,7 +2,6 @@ package com.example.alexr.ideamanager.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.alexr.ideamanager.R;
 import com.example.alexr.ideamanager.services.MessageService;
 import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,13 +35,22 @@ public class LandingActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                messageTextView.setText(response.body());
+                if (response.isSuccessful()) {
+                    messageTextView.setText(response.body());
+                } else if (response.code() == 401) {
+                    Toast.makeText(LandingActivity.this, R.string.error_session_expired, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LandingActivity.this, R.string.error_failed_to_retrieve_items, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(LandingActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, t.getMessage());
+                if (t instanceof IOException) {
+                    Toast.makeText(LandingActivity.this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LandingActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -48,5 +58,6 @@ public class LandingActivity extends AppCompatActivity {
     public void GetStarted(View view) {
         Intent intent = new Intent(this, IdeaListActivity.class);
         startActivity(intent);
+        this.finish();
     }
 }

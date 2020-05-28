@@ -19,6 +19,7 @@ import com.example.alexr.ideamanager.services.IdeaService;
 import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,7 +36,6 @@ public class IdeaListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idea_list);
-        final Context context = this;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,8 +45,8 @@ public class IdeaListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, IdeaCreateActivity.class);
-                context.startActivity(intent);
+                Intent intent = new Intent(IdeaListActivity.this, IdeaCreateActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -58,22 +58,33 @@ public class IdeaListActivity extends AppCompatActivity {
         }
 
         IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
-        Call<List<Idea>> call = ideaService.getIdeas();
+        Call<List<Idea>> ideasCall = ideaService.getIdeas();
 
-        call.enqueue(new Callback<List<Idea>>() {
+        ideasCall.enqueue(new Callback<List<Idea>>() {
             @Override
             public void onResponse(Call<List<Idea>> call, Response<List<Idea>> response) {
-                recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(response.body()));
+                if (response.isSuccessful()) {
+                    recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(response.body()));
+                } else if (response.code() == 401) {
+                    Toast.makeText(IdeaListActivity.this, R.string.error_session_expired, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(IdeaListActivity.this, R.string.error_failed_to_retrieve_items, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<List<Idea>> call, Throwable t) {
-                Toast.makeText(IdeaListActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                if (t instanceof IOException) {
+                    Toast.makeText(IdeaListActivity.this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(IdeaListActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    //region Adapter Region
+
+    // Adapter class
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -142,5 +153,4 @@ public class IdeaListActivity extends AppCompatActivity {
             }
         }
     }
-    //endregion
 }

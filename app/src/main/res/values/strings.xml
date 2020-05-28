@@ -3,4 +3,7 @@
     <string name="title_task_detail">Just a Thought</string>
 
     <string name="error_request_failed">Request Failed</string>
+    <string name="error_session_expired">Your session has expired</string>
+    <string name="error_failed_to_retrieve_items">Failed to retrieve items</string>
+    <string name="error_connection">Connection error occurred</string>
 </resources>

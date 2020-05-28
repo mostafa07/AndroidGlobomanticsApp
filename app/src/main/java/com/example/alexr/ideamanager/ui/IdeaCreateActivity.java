@@ -1,6 +1,5 @@
 package com.example.alexr.ideamanager.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +16,8 @@ import com.example.alexr.ideamanager.models.Idea;
 import com.example.alexr.ideamanager.services.IdeaService;
 import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +30,6 @@ public class IdeaCreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_idea_create);
         Toolbar toolbar = findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-        final Context context = this;
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -58,13 +58,23 @@ public class IdeaCreateActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Idea>() {
                     @Override
                     public void onResponse(Call<Idea> call, Response<Idea> response) {
-                        Intent intent = new Intent(context, IdeaListActivity.class);
-                        startActivity(intent);
+                        if (response.isSuccessful()) {
+                            Intent intent = new Intent(IdeaCreateActivity.this, IdeaListActivity.class);
+                            startActivity(intent);
+                        } else if (response.code() == 401) {
+                            Toast.makeText(IdeaCreateActivity.this, R.string.error_session_expired, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(IdeaCreateActivity.this, R.string.error_failed_to_retrieve_items, Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<Idea> call, Throwable t) {
-                        Toast.makeText(IdeaCreateActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                        if (t instanceof IOException) {
+                            Toast.makeText(IdeaCreateActivity.this, R.string.error_connection, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(IdeaCreateActivity.this, R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }

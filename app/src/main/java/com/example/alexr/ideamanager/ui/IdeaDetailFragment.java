@@ -18,6 +18,8 @@ import com.example.alexr.ideamanager.services.IdeaService;
 import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,21 +60,31 @@ public class IdeaDetailFragment extends Fragment {
             call.enqueue(new Callback<Idea>() {
                 @Override
                 public void onResponse(Call<Idea> call, Response<Idea> response) {
-                    mIdea = response.body();
+                    if (response.isSuccessful()) {
+                        mIdea = response.body();
 
-                    ideaName.setText(mIdea.getName());
-                    ideaDescription.setText(mIdea.getDescription());
-                    ideaOwner.setText(mIdea.getOwner());
-                    ideaStatus.setText(mIdea.getStatus());
+                        ideaName.setText(mIdea.getName());
+                        ideaDescription.setText(mIdea.getDescription());
+                        ideaOwner.setText(mIdea.getOwner());
+                        ideaStatus.setText(mIdea.getStatus());
 
-                    if (appBarLayout != null) {
-                        appBarLayout.setTitle(mIdea.getName());
+                        if (appBarLayout != null) {
+                            appBarLayout.setTitle(mIdea.getName());
+                        }
+                    } else if (response.code() == 401) {
+                        Toast.makeText(requireContext(), R.string.error_session_expired, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_failed_to_retrieve_items, Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Idea> call, Throwable t) {
-                    Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                    if (t instanceof IOException) {
+                        Toast.makeText(requireContext(), R.string.error_connection, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -88,13 +100,23 @@ public class IdeaDetailFragment extends Fragment {
             call.enqueue(new Callback<Idea>() {
                 @Override
                 public void onResponse(Call<Idea> call, Response<Idea> response) {
-                    Intent intent = new Intent(getContext(), IdeaListActivity.class);
-                    startActivity(intent);
+                    if (response.isSuccessful()) {
+                        Intent intent = new Intent(requireContext(), IdeaListActivity.class);
+                        startActivity(intent);
+                    } else if (response.code() == 401) {
+                        Toast.makeText(requireContext(), R.string.error_session_expired, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_failed_to_retrieve_items, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<Idea> call, Throwable t) {
-                    Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                    if (t instanceof IOException) {
+                        Toast.makeText(requireContext(), R.string.error_connection, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         });
@@ -106,13 +128,23 @@ public class IdeaDetailFragment extends Fragment {
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    Intent intent = new Intent(getContext(), IdeaListActivity.class);
-                    startActivity(intent);
+                    if (response.isSuccessful()) {
+                        Intent intent = new Intent(requireContext(), IdeaListActivity.class);
+                        startActivity(intent);
+                    } else if (response.code() == 401) {
+                        Toast.makeText(requireContext(), R.string.error_session_expired, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_failed_to_retrieve_items, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                    if (t instanceof IOException) {
+                        Toast.makeText(requireContext(), R.string.error_connection, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         });
