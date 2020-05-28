@@ -1,7 +1,6 @@
 package com.example.alexr.ideamanager.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -44,8 +43,6 @@ public class IdeaDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.idea_detail, container, false);
 
-        final Context context = getContext();
-
         Button updateIdea = rootView.findViewById(R.id.idea_update);
         Button deleteIdea = rootView.findViewById(R.id.idea_delete);
 
@@ -83,20 +80,26 @@ public class IdeaDetailFragment extends Fragment {
             });
         }
 
-        updateIdea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Idea newIdea = new Idea();
-                newIdea.setId(getArguments().getInt(ARG_ITEM_ID));
-                newIdea.setName(ideaName.getText().toString());
-                newIdea.setDescription(ideaDescription.getText().toString());
-                newIdea.setStatus(ideaStatus.getText().toString());
-                newIdea.setOwner(ideaOwner.getText().toString());
+        updateIdea.setOnClickListener(view -> {
+            IdeaService ideaService = ServiceBuilder.buildService(IdeaService.class);
+            Call<Idea> call = ideaService.updateIdea(getArguments().getInt(ARG_ITEM_ID),
+                    ideaName.getText().toString(),
+                    ideaDescription.getText().toString(),
+                    ideaStatus.getText().toString(),
+                    ideaOwner.getText().toString());
 
-                SampleContent.updateIdea(newIdea);
-                Intent intent = new Intent(getContext(), IdeaListActivity.class);
-                startActivity(intent);
-            }
+            call.enqueue(new Callback<Idea>() {
+                @Override
+                public void onResponse(Call<Idea> call, Response<Idea> response) {
+                    Intent intent = new Intent(getContext(), IdeaListActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(Call<Idea> call, Throwable t) {
+                    Toast.makeText(requireContext(), R.string.error_request_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         deleteIdea.setOnClickListener(new View.OnClickListener() {
