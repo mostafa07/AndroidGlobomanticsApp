@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -36,6 +37,7 @@ public class ServiceBuilder {
             .setLevel(HttpLoggingInterceptor.Level.BODY);
 
     private static OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
+            .readTimeout(15, TimeUnit.SECONDS)
             .addInterceptor(customHttpHeadersInterceptor)
             .addInterceptor(loggingInterceptor);
 
