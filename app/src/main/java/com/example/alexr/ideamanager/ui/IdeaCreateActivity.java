@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.alexr.ideamanager.R;
-import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
 import com.example.alexr.ideamanager.services.IdeaService;
 import com.example.alexr.ideamanager.services.builder.ServiceBuilder;
